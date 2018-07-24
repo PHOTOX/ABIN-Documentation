@@ -1,0 +1,99 @@
+\section{Introduction}
+\abin is a program performing \textit{ab initio} molecular dynamics. It was designed specifically to deal with quantum nuclear effects. It can do path integral MD and also utilizes recently developed quantum thermostat\cite{Ceriotti2011}.
+It can also simulate non-adiabatic events using Surface-hoping algorithm.   
+
+The basic philosophy of \abin is simple. While the program itself handles the propagation of the system according to the equations of motion, the forces and energies are taken from the external electronic structure program such as Gaussian. The call to the chosen external program is handled via simple shell script. Therefore, writing a new interface is rather straightforward and can be done without any changes to the \abin code or electronic structure code.
+
+The current capabilities of \abin are:
+\begin{itemize}
+\item Classical MD in the gas phase or using spherical boundary conditions. Both NVE and NVT ensembles are supported. The temperature is regulated using Nosé-Hoover chain thermostat\cite{Martyna1992a}. Equations of motions are integrated using velocity Verlet algorithm. Forces and energies are obtained either within the code using classical AMBER force field or from external programs. 
+At this moment there are interfaces to the following programs: \textsc{Gaussian 09\cite{G09}}, \textsc{Molpro}\cite{MOLPRO06}, \textsc{Gamess}\cite{Schmidt1993}, \textsc{TurboMole}\cite{turbomole}, \textsc{QChem}\cite{Shao2006}, \textsc{Orca}\cite{Neese2012}, \textsc{CP2K}\cite{Hutter2014}, \textsc{DFTB+} and \textsc{TeraChem}\cite{Ufimtsev2008}. 
+
+\item Path Integral MD using staging transformation, RESPA integrator and massive Nosé-Hoover Chain thermostat.
+
+\item Surface hopping algorithm\cite{Barbatti2011} for semi-classical MD. This code is currently interfaced with \textsc{Molpro}, \textsc{GAMESS} and \textsc{TeraChem} packages. 
+
+\item Simulations with quantum thermostat\cite{Ceriotti2010d} and combined PI+GLE\cite{Ceriotti2011} methods.
+
+\item two-layer QM/MM ONIOM interface, which calculates the "MM" part using any external program.
+
+\item Constraints using SHAKE algorithm (currently only for classical MD).
+
+\item Simple minimization using the steepest descent method. 
+\end{itemize} 
+
+The following capabilities are currently in the beta phase (i.e. they should work, but were not extensively tested):
+
+\begin{itemize}
+\item Replica Exchange Molecular Dynamics (also known as parallel tempering)
+
+\item Interface to PLUMED library, which allows to use various free energy sampling algorithms such as metadynamics or umbrella sampling.
+\end{itemize}
+
+Several other algorithms are currently under development, namely:
+\begin{itemize}
+\item PIMD utilizing normal mode coordinates, which will allow for PIMD simulations with constraints.
+Normal modes are also important for an efficient implementation of the PI+GLE method.
+\item Periodic boundary conditions, allowing for the simulations of condensed phases (at the molecular mechanical level).
+\item Ewald summation algorithm for calculation of long-range coulomb forces and energies.
+\end{itemize}
+
+\subsection{Installation}
+\abin is distributed in the form of Fortran and C source code and is intended and tested to be used in Linux environment.
+In the rest of the manual, it is always assumed that you are in the top \abin directory (i.e. ABIN-DEV). You should see (besides the source code) the following directories:
+\begin{description}
+%\item[src/] Directory with source code.
+
+\item[INTERFACES/] Directory with interfaces for many common \textit{ab initio} codes.
+
+\item[UTILS/] Directory containing many scripts and small programs that allow efficient usage of \abin. Some of scripts need to be in your \verb|$PATH| in order for other utilities to work.
+
+\item[SAMPLE/] Directory with sample input files for \abin.
+
+\item[TESTS] This is a simple test suite to verify the correct compilation of the code (see below).
+\end{description}
+
+To compile the code, you need the following to be installed in your system:
+\begin{itemize}
+\item gcc and gfortran compilers, version at least 4.3, although versions >=4.6 are preferred.
+In the improbable case that your system has older version, you can download gfortran binaries here:
+
+https://gcc.gnu.org/wiki/GFortranBinaries
+
+\item For some features (REMD, interface to TeraChem), MPI library is needed. The code was tested with the MPICH 3.1.3 version.
+
+\item For normal mode transformation (currently under development), FFTW library is needed. It is typically provided with your Linux distribution or it can be downloaded here:
+
+http://www.fftw.org/download.html 
+
+\end{itemize}
+
+\noindent
+For the first compilation, you need to rename file \verb|make.vars.example| to \verb|make.vars|.
+This file contains all customizable compilation parameters. This includes the choice of compiler, and optimization flags. One can also turn off some features i.e. for compilation without MPI libraries
+
+\medskip
+\colorbox{black!20}{MPI = FALSE}
+
+\noindent
+The compilation itself can be as easy as:
+
+\medskip
+\colorbox{black!20}{$ \$\quad make$}
+
+\noindent which should produce a binary executable \verb|$OUT|, which was defined in file \verb|make.vars|.
+
+\bigskip\noindent
+You can test the installation by:
+
+\medskip
+\colorbox{black!20}{$ \$ \quad make \; test$}
+
+\medskip\noindent
+This automatically runs a battery of test runs and checks them against reference value.
+
+\medskip
+\noindent Before recompilation, you should always clean up by:
+
+\medskip
+\colorbox{black!20}{$ \$ \quad make \; clean$}

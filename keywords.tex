@@ -1,0 +1,287 @@
+\section{List of keywords}
+This section contains a rather extensive list of all the keywords. 
+Most of the keywords have default values, which are given in the 2nd column. 
+Some of the keywords may be rather obscure and related only to technicalities or special applications.
+If you feel that you do not understand some keyword, don't worry, it's probably not important.
+The keywords that you most likely don't need to care about are given with \shade{grey background}.
+Note that the program will sometimes prevent you from using experimental features, weird keyword combinations
+or debug options unless you set $ iknow=1 $ in namelist "general". It also tries to sanitize user input against obvious errors.
+But do not rely on this feature! You can still make your simulation meaningless by choosing bad simulation parameters.
+
+The keywords are divided into namelists that they belong to.
+The namelists \textit{general} and \textit{nhc} must always be present in the input file.
+Order of namelists in the input file is irrelevant.
+
+% We should color whole cell, not only keyword, which looks ugly. See:
+% http://tex.stackexchange.com/questions/50349/color-only-a-cell-of-a-table
+
+\subsection{\&general}
+\begin{tabularx}{\textwidth}{lcX}
+\textit{keyword} & \textbf{default} & Description \\
+\hline 
+
+\textit{pot} & - & Specifies where do we get forces and energies. Supported options are: \\
+ &  & \textbf{PROGRAM} --- \abin will look for BASH interface in file \textit{PROGRAM/r.program}
+  i.e. ORCA/r.orca \\
+ &  & \textbf{nab} --- AMBER force field\\ 
+ &  & \textbf{mmwater} --- force field for water (see keyword \textit{watpot} ) \\
+ &  & \textbf{harm} --- diatomic harmonic oscillator \\ 
+ &  & \textbf{morse} --- Morse potential for diatomic molecule\\
+ &  & \textbf{2dho} --- \textit{n}-dimensional one-atom harmonic oscillator (n=1-3) \\ 
+
+\textit{natom} & -- &  Number of atoms. \\ 
+ 
+\textit{pimd} & \textbf{0} & Controls the type of simulation. \\  
+ & & \textbf{0} --- Classical simulation \\ 
+ & & \textbf{1} --- Path-integral simulation \\  
+ & & \textbf{2} --- Surface Hopping \\
+ & & \textbf{3} --- Simple steepest-descent minimization \\ 
+
+\textit{nstep} & \textbf{1}& Number of time steps. \\
+
+\textit{dt} & \textbf{20} & Time step [a.\,u.] \\
+
+\textit{irandom} & \textbf{156873} & Random seed \\ 
+
+\textit{irest} & \textbf{0} & Controls the restart of the simulation. \\
+ & & \textbf{0} -- Do not restart. Take the initial structure from mini.dat \\
+ & & If restart.xyz is present, end with and error for safety reasons. \\
+ & & \textbf{1} -- Restart the simulation from file "restart.xyz". \\ 
+ & & Copy the file "restart.xyz" to "restart.xyz.\textit{it}", where \textit{it} is the current timestep.  \\
+
+\textit{imini} & \textbf{0} &  Number of time steps for equilibration of the system. 
+During this period, the coordinates are printed to file movie\_mini.xyz. Should be at least 2\,picoseconds for small simple systems. \\
+
+\textit{conatom} & \textbf{0} & Number of frozen atoms. \\ 
+& & \\
+& & \textsc{Keywords for PIMD and PI-GLE simulations} \\
+\textit{nwalk} & \textbf{1} & Number of random walkers (beads) for PIMD. \\
+ & & It is automatically set to 1 if \textit{pimd=0}. \\
+ 
+\textit{istage}  & \textbf{0} & Controls the coordinates used for PIMD.\\
+ & & \textbf{0} -- Normal cartesian coordinates.  \\
+ & & \textbf{1} -- Staging coordinates; these should we always used with PIMD. \\
+\textit{nproc} & \textbf{1} & Number of processors for parallel simulations. \\
+& & Should be 1 or equal to \textit{nwalk}. 	 \\
+\colorbox{black!20}{\textit{nabin}} & \textbf{50} & Number of substeps in RESPA algorithm used for PIMD. \\
+ 
+& & \\
+& & \textsc{Options controlling the output} \\
+\textit{nwrite} & \textbf{1}  & Print basic output every \textit{nwrite} step (e.g. temperature, energies).  \\
+\textit{nwritex}& \textbf{1}  & Print coordinates every  \textit{nwritex} step. \\
+\textit{nrest} & \textbf{1}   & Print restart file every \textit{nrest} step.   \\
+& &  Larger value is recomended, since restart files can be quite big. \\
+\textit{nwritev} & \textbf{0} & Print velocities every \textit{nwritev} step.   \\
+\colorbox{black!20}{\textit{ncalc}} & \textbf{1}   & Calculate observables (energies, temperature) every \textit{ncalc} step. 	\\
+
+\end{tabularx}
+\newpage
+
+\begin{tabularx}{\textwidth}{lcX}
+
+& & \textsc{Other options} \\
+\textit{isbc }&\textbf{0} & Controls spherical boundary conditions (SBC).\\
+& & \textbf{0} -- Off.\\
+& & \textbf{1} -- On.\\
+\textit{rb\_sbc} & -- & Radius of the sphere for SBC in Angstroms.\\
+& &  If not given, the radius of the initial structure is used. \\
+\textit{kb\_sbc} & \textbf{0.02} &  Force constant for SBC in atomic units. \\
+
+\colorbox{black!20}{\textit{anal\_ext}} & \textbf{0} & Should we call external analysis routine? \\
+ & &User can write his/her own routine, which is called during analysis.\\
+ & &  Template for this subroutine is in file analyze\_ext\_template.f90. \\
+
+\colorbox{black!20}{\textit{icv}}  & \textbf{0} &	 Should we calculate constant volume heat capacities? \\
+\colorbox{black!20}{\textit{ihess}}& \textbf{0} &  Should we compute hessian for heat capacities? \\
+& &  Currently only implemented for pot=\textit{nab},\textit{harm} or \textit{morse}.   \\
+\end{tabularx} 
+
+
+\subsection{\&system}
+\begin{tabularx}{\textwidth}{lcX}
+\textit{keyword} & \textbf{default} & Description \\
+\hline 
+\textit{massnames} & \textit{array} & Array of atom names, for which we define user-specified masses. \\
+\textit{masses} & \textit{array} &  Array of user-specified masses. \\
+& & This array should match the \textit{massnames} array. \\
+& & \\
+
+& & \textsc{Shake options} \\
+\textit{nshake} & \textbf{0} & Number of fixed bonds. \\
+\textit{shake\_tol} & \textbf{0.001} & Shake convergence tolerance \\
+\textit{ishake1} & \textit{array} & Array of first-atom indices specifying the fixed bonds.  \\
+\textit{ishake2} & \textit{array} & Array of second-atom indices specifying the fixed bonds. \\
+& & \\
+& & \textsc{Options related to geometrical analyses} \\
+\shade{\textit{ndist}   }& \textbf{0} & Number of distances for analysis. \\
+\shade{\textit{nang} }& \textbf{0} & Number of angles for analysis. \\
+\shade{\textit{ndih} }& \textbf{0} & Number of dihedral angles for analysis. \\
+
+\shade{\textit{dist1} }& \textit{array} & Array of first-atom indices for bond definition.\\
+\shade{\textit{dist2} }& \textit{array} & Array of second-atom indices for bond definition.\\
+\shade{\textit{ang1} }& \textit{array} & Array of first-atom indices for angle definition.\\
+
+\shade{\textit{xmin} }& 0.5 & Minimum bond distance for binning. \\
+\shade{\textit{xmax} }& 5.0 & Maximum bond distance for binning. \\
+\shade{\textit{disterror} }& \textbf{0} & If set to \textbf{1}, abort the simulation
+if the bond distance is outside the range (\textit{xmin},\textit{xmax}).\\ 
+
+\shade{\textit{ang2} }& \textit{array} & Array of second-atom indices for angle definition.\\
+\shade{\textit{ang3} }& \textit{array} & Array of third-atom indices for angle definition.\\
+
+\shade{\textit{dih1} }& \textit{array} & Array of first-atom indices for dihedral definition.\\
+\shade{\textit{dih2} }& \textit{array} & Array of second-atom indices for dihedral definition.\\
+\shade{\textit{dih3} }& \textit{array} & Array of third-atom indices for dihedral definition.\\
+\shade{\textit{dih4} }& \textit{array} & Array of fourth-atom indices for dihedral definition.\\
+
+
+\shade{ \textit{nbin} }& \textbf{2000} & Number of bins for the histograms of bond densities. \\
+\shade{\textit{nbin\_ang}} & \textbf{180} & Number of bins for the histograms of angles. \\
+& & \\
+
+\hline
+\end{tabularx}
+
+\newpage
+\subsection{\&nhcopt}
+\begin{tabularx}{\textwidth}{lcX}
+\textit{keyword} & \textbf{default} & Description \\
+\hline
+\textit{temp} & \textbf{0.0} &  Temperature in Kelvins.
+This also controls the generation of initial velocities if \textit{temp0} is not explicitly set. \\ 
+\textit{temp0} & -- &  Temperature of initial Maxvell-Boltzmann distribution. \\
+\textit{inose} & \textbf{0} &  Controls the use of a thermostat. \\
+& & \textbf{0} -- Microcanonical trajectory. No thermostat. \\
+& & \textbf{1} -- Nos\'{e}-Hoover thermostat.\\
+& & \textbf{2} -- Quantum GLE thermostat.\\
+
+
+\textit{nchain} & \textbf{4} & Number of Nos\'{e}-Hoover chains. This should be always $>1$ for small systems. \\
+
+\textit{tau0} & \textbf{0.001} & Relaxation time of the thermostat in picoseconds. From this parameter, 
+the thermostat masses are determined automatically based on temperature and size of the system.\cite{Tuckerman_book} \\
+
+\textit{imasst} & \textbf{1} & Determines, whether we use massive or global thermostat. \\
+& & \textbf{0} -- Use global thermostat.
+Requires further specification of the system using \textit{nmolt}, \textit{natmolt} and \textit{nshakemol} variables.
+WARNING: This was not thoroughly tested.
+Since we do not remove rotations, this thermostat can produce wrong results. It is however required if you use SHAKE.\\
+& & \textbf{1} -- Use massive thermostat. Each degree of freedom has its own NH chain.
+This is required for PIMD and recommended for classical simulations. \\
+
+\textit{nmolt} & \textbf{1} & If we use global NHC thermostat, the system is divided into \textit{nmolt} parts
+and each part has its own NHC thermostat. \\
+
+\textit{natmolt} & \textit{array}& Array of integers specifying the number of atoms in each part that has its own thermostat.
+This assumes, that the parts are consecutively aligned in the input coordinates.  \\
+
+\textit{nshakemol} & \textbf{0} & Array of integers specifying a number of fixed bonds in each part of the system that has its own thermostat.
+Note that you can not fix bonds between atoms from different parts of the system. \\
+
+\colorbox{black!20}{nrespnose} & \textbf{3} & Number of sub-steps of the NHC integrator.\cite{Tuckerman_book} \\
+
+\colorbox{black!20}{nyosh} & \textbf{7} & Number of weights in the Suzuki-Yoshida scheme.\cite{Tuckerman_book} \\
+& & \textbf{1} - Do not use Suzuki-Yoshida scheme (not recommended) \\
+& & 3 -- 4th order Suzuki-Yoshida scheme.\\
+& & 7 -- 6th order Suzuki-Yoshida scheme.\\  
+
+\colorbox{black!20}{\textit{ams}} & -- &  Nos\'{e}-Hoover mass.
+This number is always chosen automatically for PIMD simulations.
+This parameter overrides the \textit{tau0} parameter. \\
+
+\colorbox{black!20}{\textit{scaleveloc}} & \textbf{1} & Whether we scale initial velocities so that the total kinetic energy
+matches the desired temperature. This should reduce the initial oscillations of the thermostat. \\ 
+
+\colorbox{black!20}{\textit{initnhc}} & \textbf{1} & Whether we initialize NHC momenta. \\ 
+
+\colorbox{black!20}{\textit{readnhc}} & \textbf{1} & Read NHC momenta from restart.xyz if $inose=1$. \\ 
+
+\end{tabularx}
+
+
+\newpage
+\subsection{\&sh}
+This namelist contains parameters for surface hopping simulations and is read only if \textit{ipimd}=3.
+ 
+\hspace*{-0.4cm} 
+\begin{tabularx}{\textwidth}{lcX}
+\textit{keyword} & \textbf{default} & Description \\
+\hline
+\textit{nstate} & \textbf{1} & Number of electronic adiabatic states.\\
+%\rule[0ex]{0pt}{4ex}
+\textit{istate\_init} & \textbf{1} & Initial electronic state. \\ 
+
+\textit{deltae} & \textbf{5.0} & Energy threshold for the computation of NAC vectors.
+The NAC vector between states is not computed if the difference in energy is $ > deltae$.\\ 
+ 
+\textit{popthr} & \textbf{0.001} & The NAC vector between two states is not computed,
+unless at least one of them has population $ > popthr$. Set this to some negative number to disable this feature. \\
+
+\textit{nac\_accu1} & \textbf{7} & Default accuracy of NAC vector is $10^{-nac\_accu1}$. \\
+
+\textit{nac\_accu2} & \textbf{5} & If the calculation of NAC does not converge, 
+try with accuracy $10^{-nac\_accu2}$. \\
+
+
+\textit{energydifthr} & \textbf{1.0} &  Abort the simulation if the total energy in two consecutive
+time steps differs more than \textit{energydifthr}.       \\
+ 
+\textit{energydriftthr} & \textbf{1.0} & Abort the simulation the total energy drifts 
+from its initial value more than this threshold. 
+This criterion is more strict than \textit{energydifthr}. \\
+
+\textit{substep} & \textbf{100} & Number of substeps for the integration of electronic SE. \\
+
+\shade{\textit{popsumthr}} & \textbf{0.001} & If the norm of the electronic wave function differs from 1
+more than \textit{popthr}, the simulation is aborted.
+You should probably increase \textit{substep}. \\
+
+\shade{\textit{alpha}} & \textbf{0.1} & Empirical parameter for the decoherence correction, implemented according to reference \cite{Granucci2007}.
+If you do not want to use decoherence correction, set $alpha <= 0 $. \\
+   
+
+\shade{\textit{integ}} & \textbf{butcher} & Integrator of the electronic Schr\"{o}dinger equation. \\
+& & \textbf{euler} -- Euler integrator. Only for debugging purposes!\\
+& & \textbf{rk4} -- Runge-Kutta 4th-order integrator. Not recommended.\\
+& & \textbf{butcher} -- Butcher's 5th-order integrator. Default and recommended.\\
+
+\shade{\textit{nohop}} & \textbf{0} & Hopping is forbidden if $nohop=1$. \\
+
+\shade{\textit{inac}} & \textbf{0} & Controls whether we use NAC couplings or time-derivative couplings. \\
+ & & \textbf{0} -- Use non-adiabatic couplings from \textit{ab initio} program. \\
+ & & \textbf{1} -- Use time-derivative couplings. \\
+ 
+\shade{\textit{adjmom}} & \textbf{0} & Controls the adjustment of velocity after the hopping event. \\
+ & & \textbf{0} -- Adjust the velocity along the direction of NAC vector.
+ If there is not enough kinetic energy in that direction,
+ try simple scaling as if \textit{adjmom}=1. \\
+ & & \textbf{1} -- Scale the velocity, if there is enough kinetic energy. \\
+ & & This is the only and default option if \textit{inac}=1.  \\
+ 
+ \shade{\textit{revmom}} & \textbf{0} & Should we reverse the velocity in case of frustrated hop? \\
+ & & \textbf{0} -- No. \\
+ & & \textbf{1} -- Yes. \\
+ 
+ \shade{\textit{phase}} & \textbf{0} & Should we integrate the phase along the trajectory? \\
+ & & \textbf{0} -- No. \\
+ & & \textbf{1} -- Yes. \\
+ 
+\end{tabularx}
+
+
+
+
+%\subsection{\&qmmm}
+%\begin{description}
+%\item[natqm] Number of quantum atoms. These must be first in \textit{mini.dat}!
+%\end{description}
+%
+%\subsection{\&nab}
+%\begin{description}
+%\item[ipbc] Control PBC.Must match conditions in input.top\newline
+%\textbf{0} -- PBC off.\newline 
+%\textbf{0} -- PBC on. 
+%\end{description}
+
+
+
