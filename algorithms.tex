@@ -2,6 +2,12 @@
 \subsection{PIMD with staging transformation}
 There are three essential aspects of an efficient PIMD scheme: Coordinate transformation that uncouples the quantum harmonic terms (either staging or normal modes), efficient thermostatting and multiple time step algorithm. These will be all described in detail in next few paragraphs, including working equations as implemented in the \textsc{Abin} code.
 
+In line math $E=mc^2$ here
+
+\begin{equation}
+    \label{eq:cjskld}
+\end{equation}
+
 Staging transformation is defined by the recursive relations 
 \begin{eqnarray}
 q_1&=&x_1 \nonumber \\
@@ -202,20 +208,17 @@ Note that neither PI+GLE nor PIGLET methods provide rigorous momentum distributi
 \label{sGLEimpl}
 The quantum thermostat in \textsc{ABIN} is based on the sample code from the website \textit{http://gle4md.berlios.de/} which is maintained by the original authors.
 At present, the GLE thermostat is called on top of the classical velocity Verlet algorithm according to the following pseudocode:
-\vspace*{0.4cm}
 
-\textit{call GleStep}($\frac{dt}{2}$)
-
-$p = p + force\times\frac{dt}{2} $
-
-$q = q + \frac{p}{m}dt $
-
-\textit{call GetForces}() 
-
-$p = p + force\times\frac{dt}{2} $
-
-\textit{call GleStep($\frac{dt}{2}$)}
-\vspace*{0.4cm}
+\bigskip
+\begin{verbatim}
+    call GleStep(dt / 2)
+    p = p + F dt / 2
+    q = q + p / m dt
+    call GetForces(q, F) 
+    p = p + F dt / 2
+    call GleStep(dt / 2)
+\end{verbatim}
+\bigskip
 
 The PI+GLE method is also implemented. The GLE thermostat in this case is part of the RESPA algorithm in the same way as the NHC thermostat. Note, that in PI+GLE method, one has to use physical bead masses i.\,e. staging transformation is not applicable in this case\cite{Ceriotti2012}. More efficient implementation would require the use of normal mode transformation. This is now a work in progress.
 

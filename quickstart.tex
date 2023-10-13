@@ -5,7 +5,7 @@ There are two mandatory input files -- one contains the input coordinates in xyz
 
 The XYZ format is specified as follows:
 
-first line contains number of atoms, second line is empty or contains some comment and the following lines contains cartesian coordinates (in \AA ngstroms) in the form "\textit{atom-name	x y z}". The atom names are not case-sensitive. For example, molecule of water is specified as:
+first line contains number of atoms, second line is empty or contains some comment and the following lines contains cartesian coordinates (in \AA ngstroms) in the form "\textit{atom-name	x y z}". The atom names are not case-sensitive. For example, a water molecule is specified as:
 
 \begin{verbatim}
 3
@@ -46,7 +46,7 @@ nwritev=0,              ! how often should we print velocities?
 
 &nhcopt
 temp=298.15,     ! Temperature [K] for Maxwell-Boltzmann sampling and thermostat.
-inose=1,         ! Thermostatting: 0=no thermostat, 1=Nosé-Hoover 1,2=GLE
+inose=1,         ! Thermostatting: 0 = no thermostat, 1 = Nosé-Hoover 1, 2 = GLE
 tau0=0.001,      ! relaxation time of the NHC thermostat [ps]
 /
 
@@ -99,6 +99,7 @@ There are a few scripts that are recommended for efficient execution of \abin jo
 The launching script \textit{r.abin} (it should be located at the same directory as your input files) can be submitted simply as follows:
 
 \bigskip 
+
 \colorbox{black!20}{\$  \textit{qsub -cwd r.abin}} (you may also want to specify the queue by \textit{-q QueueName})
 
 \bigskip \noindent 
@@ -108,7 +109,7 @@ The names of the node and the scratch directory are written to file job.log
 In order to see the current data from the run, one can use the script \textit{fetchabin.sh} simply as:
 
 \bigskip
-\colorbox{black!20}{$ \$ \quad fetchabin.sh $} (assuming it is in your $PATH$).
+\colorbox{black!20}{$ \$ \quad fetchabin.sh $} (assuming it is in your \textsc{\$PATH}).
 
 \bigskip \noindent 
 This will copy the files from the scratch to the current working directory.  
@@ -197,7 +198,7 @@ For example, it might be convenient to set \textit{nproc=4} when using PI-GLE me
 \subsection{Running simulations with GLE thermostat}
 Besides the Nosé-Hoover thermostat, \abin can also use the thermostat based on Generalized Langevin equation (GLE). While this thermostat can be used also for classical MD and has many different application, it is currently used to simulate quantum nuclear effects using either Quantum Thermostat or PI+GLE method as described below.
 
-\subsection{Quantum thermostat}
+\subsubsection{Quantum thermostat}
 The quantum thermostat method (here denoted QT) was devised by M. Cerriotti et al. CITE for efficient simulations of quantum nuclear effects without the need for Path Integrals, which are very computationally demanding. There are two key ideas behind this method:
 
 \begin{itemize}
@@ -209,7 +210,7 @@ T =
 \end{equation}
 \end{itemize}
 
-\subsection{PI+GLE method}
+\subsubsection{PI+GLE method}
 The ideas behind the quantum thermostat can be also applied for accelerating the convergend of PIMD simulations to the quantum limit.  
 
 
