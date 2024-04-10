@@ -57,7 +57,7 @@ Besides these two input files, you need to prepare the directory with a bash scr
 After you prepared your input files, you can run \abin simply as:
 
 \bigskip
-\noindent \colorbox{black!20}{$ \$ ./abin \quad [-c \; coordinates.xyz]\; [-i\; input.dat]\quad [-v \; velocities.xyz]\; \quad > output $}
+\noindent \colorbox{black!20}{$ \$ ./abin \quad [-x \; coordinates.xyz]\; [-i\; input.dat]\quad [-v \; velocities.xyz]\; \quad > abin.out $}
 
 \bigskip \noindent
 As you can see, you can also provide file with initial velocities in the same XYZ format as coordinates. However, velocities must be in atomic units. Without the command line options, the program looks for initial coordinates in file \textit{mini.dat}, input parameters in \textit{input.in} and takes initial velocities from Maxvell-Boltzmann distribution.
@@ -77,8 +77,6 @@ All output files are simple text files. Besides the files containing the geometr
 is probably not working properly.
 
 \item[energies.dat] This file contains various types of energies. The content may vary slightly depending on the type of simulation. However, the columns are usually in the following order: \textit{time}, \textit{potential energy}, \textit{kinetic energy}, \textit{total energy}.
-
-\item[movie\_mini.xyz]  Contains trajectory from the equilibration period (see parameter \textit{imini}). Thus it is usually not used for subsequent analysis. Note however, that all previous files contains data from equilibration period.
 
 \item[movie.xyz] This file contains the trajectory in the xyz format and is directly e.g. by VMD or Molden.
 

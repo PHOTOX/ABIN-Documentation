@@ -51,6 +51,7 @@ H= \frac{p_k^2}{2m_k^*} + U + \sum_{\gamma=1}^M\left[\frac{p^2_{\eta_\gamma}}{2Q
 
 This quantity should not drift over time as we are using a time-reversible integrator (see below). One should also always check the convergence of the primitive and centroid-virial energy estimators (Eqs. \ref{eqeprim} and \ref{eqevir}) as these should always converge to the same value regardless of number of beads. Failure to do so usually indicates that the time step is too long.
 
+
 \begin{equation}
 \epsilon_\mathrm{P}=\frac{3NP}{2\beta}-\frac{1}{2}\omega_P^2\sum_{i=1}^N m_i\sum_{s=1}^P |\mathbf{r}_{i,s}-\mathbf{r}_{i,s+1}|^2+\overline{U} ,
 \label{eqeprim}
