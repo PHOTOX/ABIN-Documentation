@@ -228,3 +228,28 @@ The parameters for different simulations can be obtained from the same website a
 There is a fundamental difference between GLE and PIGLE parameters. The latter were optimized only to give correct position distributions since the momenta do not have physical meaning in the PIMD method. This approach leaves more freedom in the fitting procedure and therefore, the PIGLE parameters were also optimized for optimal sampling. Therefore, even for simulations with one bead, PIGLE-P1 parameters should be superior to the original GLE parameters if one is not interested in the momentum distribution. 
 
 
+\newpage
+\subsection{Landau--Zener Surface Hopping}
+The Landau--Zener Surface Hopping (LZSH) method extends the Landau--Zener transition formula for 1D case into multidimensional systems and allows simultaneous treatment of \textit{internal conversion (IC)} and \textit{intersystem crossing (ISC)} events.\cite{SuchanLZ} Unlike in the FSSH algorithm, the transition probability is not evaluated at every timestep but only when a crossing event is detected. For IC this happens when two adiabatic surfaces come closest in energy, forming so-called three-point minimum. For ISC this is when two diabatic surfaces (e.g., singlet and triplet states)directly cross each other. This formulation eliminates the need for explicit nonadiabatic coupling (NAC) vectors, reducing computational cost and improving numerical stability. 
+
+For transitions between adiabatic states $k$ and $l$ within the same spin manifold (singlet--singlet or triplet--triplet), the transition probability equals to
+\begin{equation}
+P_{k \to l}^{\mathrm{LZ}} =
+\exp\!\left(-\frac{\pi}{2\hbar}\sqrt
+\frac{\Delta E_{kl}(\textbf{R}(t^*))^3}{
+\frac{\mathrm{d}^2}{\mathrm{d}t^2}\Delta E_{kl}(\textbf{R}(t^*))|_{t=t^*}}\right),
+\end{equation}
+where $\Delta E_{kl} = E_l - E_k$ is the instantaneous energy gap and $t^*$ is the time of minimal separation between the two surfaces. A velocity rescaling ensures energy conservation after a hop; if insufficient kinetic energy is available, the hop is rejected.
+
+Transitions between states of different spin multiplicities are treated in a spin-diabatic representation. The diabatic states are coupled by the spin--orbit coupling (SOC) matrix element $H_{ij}$, and the corresponding transition probability is
+\begin{equation}
+P_{i \to j}^{\mathrm{ISC}} =
+1 - \exp\left(-\frac{2\pi}{\hbar}
+\frac{H_{ij}^2}{
+\left|\frac{\mathrm{d}}{\mathrm{d}t}\Delta E_{ij}(\textbf{R}(t^*))\right|_{t^\dagger}}\right),
+\end{equation}
+where $\Delta E_{ij}$ is the energy difference and $t^\dagger$ is time of crossing.
+
+
+The limits of the method are following. Since the formula was originally developed for a two state problem, accuracy may decrease for dense manifolds of states or when encountering three-state intersections. For mixed singlet--triplet dynamics, it works well when SOCs are moderate, but will break down once the state splittings become large (e.g., HI molecule). Due to the reliance of the method on PESs one needs to use an electronic structure method that provides continuous energies without any sudden jumps. These would create false crossing events and render the results unreliable. Nevertheless, the code should issue warning in these cases.\cite{Jira2025}
+

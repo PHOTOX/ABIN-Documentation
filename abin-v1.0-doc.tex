@@ -6,11 +6,12 @@
   % However, \hbar won't work in text mode, which should not be a problem
   \expandafter\let\expandafter\hbar\csname ?-\string\hbar\endcsname
   % End of magic code
-  %  \usepackage{xltxtra}
+  % \usepackage{xltxtra}
 \else
-  \usepackage   [utf8]{inputenc}
+  \usepackage[utf8]{inputenc}
   \usepackage[T1]{fontenc}
 \fi
+\usepackage{listings}
 
 \newcommand{\shade}[1]{\colorbox{black!20}{#1}}
 
@@ -19,7 +20,7 @@
 \usepackage[
 unicode=true,
 pdftitle={ABIN Manual},
-pdfauthor={Daniel Hollas},
+pdfauthor={Daniel Hollas, Jiri Janos, Jiri Suchan},
 bookmarks=true,
 colorlinks=true,
 breaklinks=true,
@@ -28,13 +29,15 @@ citecolor=blue,
 linkcolor=blue,
 ]{hyperref}
 
+\usepackage{booktabs}
+\usepackage{amssymb}
+
 \usepackage{tabularx}
 \usepackage[super,sort&compress,comma]{natbib}
-%\bibliographystyle{achemso}
 \usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
-\author{Daniel Hollas}
+\author{Daniel Hollas, Ji\v{r}\'{i} Jano\v{s}, Ji\v{r}\'{i} Suchan, Petr Slav\'{i}\v{c}ek}
 \title{\textsc{Abin} - Documentation}
-\title{\textsc{Abin} -  \textit{Ab initio} molecular dynamics program \\ v1.1}
+\title{\textsc{Abin} -  \textit{Ab initio} molecular dynamics program \\ v1.2}
 \begin{document}
 
 %\thanks{written by Daniel Hollas}
@@ -59,9 +62,7 @@ linkcolor=blue,
 \clearpage
 \input{algorithms.tex}
 
-
 \clearpage
 \bibliographystyle{plain}
 \bibliography{abin.bib}
-
 \end{document}
