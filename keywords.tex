@@ -40,8 +40,8 @@ Order of namelists in the input file is irrelevant.
 \textit{irandom} & - & Random number seed (needed for reproducible simulations) \\ 
 
 \textit{irest} & \textbf{0} & Controls the restart of the simulation. \\
- & & \textbf{0} -- Do not restart. Take the initial structure from mini.dat \\
- & & If restart.xyz is present, end with and error for safety reasons. \\
+ & & \textbf{0} -- Do not restart. \\
+ & & If "restart.xyz" file is present, end with and error for safety reasons. \\
  & & \textbf{1} -- Restart the simulation from file "restart.xyz". \\ 
  & & Copy the file "restart.xyz" to "restart.xyz.\textit{it}", where \textit{it} is the current timestep.  \\
 
@@ -149,14 +149,14 @@ if the bond distance is outside the range (\textit{xmin},\textit{xmax}).\\
 \newpage
 \subsection{\&thermostat}
 
-Previously called \&nhcopt.
+(Previously called "\&nhcopt", which is still supported for backwards compatibility reasons)
 
 \noindent\begin{tabularx}{\textwidth}{lcX}
 \textit{keyword} & \textbf{default} & Description \\
 \hline
 \textit{temp} & \textbf{0.0} &  Temperature in Kelvins.
 This also controls the generation of initial velocities if \textit{temp0} is not explicitly set. \\ 
-\textit{temp0} & -- &  Temperature of initial Maxvell-Boltzmann distribution. \\
+\textit{temp0} & -- &  Temperature of initial Maxwell-Boltzmann distribution. \\
 \textit{itherm} & -- &  Controls the use of a thermostat. Previously \textit{inose}. \\
 & & \textbf{none} -- Microcanonical trajectory. No thermostat. (\textit{inose=0}) \\
 & & \textbf{nhc} -- Nos\'{e}-Hoover thermostat. (\textit{inose=1})\\
@@ -312,18 +312,3 @@ This namelist contains parameters for Landau--Zener surface hopping simulations 
 \shade{\textit{energydifthr\_lz}} & \textbf{0.5} & Abort the simulation if energy difference (eV) between two consecutive steps differs more than \textit{energydifthr\_lz}.\\
 
 \end{tabularx}
-
-%\subsection{\&qmmm}
-%\begin{description}
-%\item[natqm] Number of quantum atoms. These must be first in \textit{mini.dat}!
-%\end{description}
-%
-%\subsection{\&nab}
-%\begin{description}
-%\item[ipbc] Control PBC.Must match conditions in input.top\newline
-%\textbf{0} -- PBC off.\newline 
-%\textbf{0} -- PBC on. 
-%\end{description}
-
-
-

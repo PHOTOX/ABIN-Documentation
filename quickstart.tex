@@ -61,7 +61,7 @@ After you prepared your input files, you can run \abin as:
 ./abin [-x  coord.xyz] [-i input.in] [-v vel.xyz] &> abin.out  
 \end{lstlisting}
 
-You can provide file with initial velocities in the same XYZ format as coordinates. However, velocities must be in atomic units. Without the command line options, the program looks for initial coordinates in file \texttt{mini.dat}, input parameters in \texttt{input.in} and takes initial velocities from Maxvell--Boltzmann distribution.
+You can provide file with initial velocities in the same XYZ format as coordinates. However, velocities must be in atomic units. Without the command line options, the program looks for initial coordinates in file \texttt{mini.dat}, input parameters in \texttt{input.in} and takes initial velocities from Maxwell--Boltzmann distribution.
 
 If you run \abin in a cluster environment, it is better to use the automated scripts as described in the section \ref{sec:clusters}.
 
@@ -134,7 +134,7 @@ ABIN-INTERFACES/ORCA. Now you have to modify script ORCA/r.orca and specify the 
 \item Now you need to create or modify the file with input parameters. Copy the sample file from SAMPLES/input.in.cmd.
 
 This file is commented so it should be straightforward to understand. There are a few basic things that need to be specified in every simulation: where do we get forces (parameter \textit{pot}), how many atoms we have (\textit{natom}), what type of simulation do we want (\textit{ipimd}, how many time steps and their length (\textit{nstep, dt}). These keywords are in namelist "general". There are two more critical parameters in namelist "nhcopt". You need to specify the thermostat (in this case we will use Nosé-Hoover-Chain thermostat, inose=1)
-and temperature of the system (\textit{temp}). The keyword \textit{temp} also specifies the initial temperature i.e. the Maxvell-Boltzmann distribution from which we randomly take initial velocities. And that's basically it.
+and temperature of the system (\textit{temp}). The keyword \textit{temp} also specifies the initial temperature i.e. the Maxwell-Boltzmann distribution from which we randomly take initial velocities. And that's basically it.
 
 \item Now you can launch the simulation. If you are using the cluster environment, copy the script \texttt{utils/run.abin.sh}.
 
